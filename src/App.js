@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { UserProvider } from "./contextAPI/context";
 
+import "./App.css";
+
+import Navbar from "./components/navbar/Navbar";
+
+const initialState = {
+  login: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "login":
+      return {
+        login: true,
+      };
+    case "logout":
+      return {
+        login: false,
+      };
+    default:
+      return state;
+  }
+};
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <UserProvider value={{ state: state, dispatch: dispatch }}>
+          <Navbar />
+        </UserProvider>
+      </Router>
     </div>
   );
 }
